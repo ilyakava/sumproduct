@@ -46,8 +46,8 @@ sum-product algorithm
 
 ::
 
-    \>\>\> g.compute_marginals()
-    \>\>\> g.nodes['x1'].marginal()
+    >>> g.compute_marginals()
+    >>> g.nodes['x1'].marginal()
 
 Brute force marginalization and conditioning
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -58,8 +58,8 @@ expense) if you have a loopy graph.
 
 ::
 
-    \>\>\> g.brute_force()
-    \>\>\> g.nodes['x1'].bfmarginal
+    >>> g.brute_force()
+    >>> g.nodes['x1'].bfmarginal
     array([ 0.5,  0.5])
 
 Condition on Observations
@@ -67,9 +67,9 @@ Condition on Observations
 
 ::
 
-    \>\>\> g.observe('x2', 2) # observe state 1 (middle of above f12 potential)
-    \>\>\> g.compute_marginals(max_iter=500, tolerance=1e-6)
-    \>\>\> g.nodes['x1'].marginal()
+    >>> g.observe('x2', 2) # observe state 1 (middle of above f12 potential)
+    >>> g.compute_marginals(max_iter=500, tolerance=1e-6)
+    >>> g.nodes['x1'].marginal()
     array([ 0.2,  0.8])
 
 Additional Information
