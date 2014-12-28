@@ -48,6 +48,7 @@ sum-product algorithm
 
     >>> g.compute_marginals()
     >>> g.nodes['x1'].marginal()
+    array([ 0.5,  0.5])
 
 Brute force marginalization and conditioning
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
