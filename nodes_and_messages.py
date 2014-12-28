@@ -136,6 +136,8 @@ class Factor(Node):
     return out
 
 class Variable(Node):
+  bfmarginal = None
+
   def __init__(self, name, size):
     self.size = size
     Node.__init__(self, name)

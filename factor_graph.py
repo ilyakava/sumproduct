@@ -1,5 +1,5 @@
 import numpy as np
-from lib.nodes_and_messages import Variable, Factor, Mu
+from nodes_and_messages import Variable, Factor, Mu
 import pdb
 
 class FactorGraph:
@@ -114,7 +114,8 @@ class FactorGraph:
       for sender in senders:
         next_recipients = sender.connections
         for recipient in next_recipients:
-          print sender.name + ' -> ' + recipient.name
+          if not self.silent:
+            print sender.name + ' -> ' + recipient.name
           val = sender.make_message(recipient)
           message = Mu(sender, val)
           recipient.deliver(step, message)
@@ -123,3 +124,48 @@ class FactorGraph:
     if not self.silent:
       print 'X'*50
       print 'final epsilon after ' + str(step) + ' iterations = ' + str(epsilon)
+
+  def brute_force(self):
+    """
+    Main strategy of this code was gleaned from:
+    http://cs.brown.edu/courses/cs242/assignments/hw1code.zip
+
+    # first compute the full joint table
+    - create a joint accumulator for N variables that is N dimensional
+    - iterate through factors
+      - for each factor expand probabilities into dimensions of the joint
+      table
+        - create a factor accumulator that is N dimensional
+        - for each coord in the joint table, look at the states of the
+        vars that are in the factor's potentials, and add in the log of
+        that probability
+    - exponentiate and normalize
+    # then compute the marginals
+    - iterate through variables
+      - for each variable sum over all other variables
+    """
+    variables = [v for v in self.nodes.values() if isinstance(v, Variable)]
+
+    var_dims = [v.size for v in variables]
+    N = len(var_dims)
+    assert N < 32, "max number of vars for brute force is 32 (numpy's matrix dim limit)"
+    log_joint_acc = np.zeros(var_dims)
+    for factor in [f for f in self.nodes.values() if isinstance(f, Factor)]:
+      # dimensions that will matter for this factor
+      which_dims = [variables.index(v) for v in factor.connections]
+      factor_acc = np.ones(var_dims)
+      for joint_coord in np.ndindex(tuple(var_dims)):
+        factor_coord = tuple([joint_coord[i] for i in which_dims])
+        factor_acc[joint_coord] *= factor.p[factor_coord]
+      log_joint_acc += np.log(factor_acc)
+    log_joint_acc -= np.max(log_joint_acc) # to avoid numerical issues
+    joint_acc = np.exp(log_joint_acc) / np.sum(np.exp(log_joint_acc))
+    # compute marginals
+    for i, variable in enumerate(variables):
+      sum_dims = [j for j in range(N) if not j == i]
+      sum_dims.sort(reverse=True)
+      collapsing_marginal = joint_acc
+      for j in sum_dims:
+        collapsing_marginal = collapsing_marginal.sum(j) # lose 1 dim
+      variable.bfmarginal = collapsing_marginal
+    return variables
