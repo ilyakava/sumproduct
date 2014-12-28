@@ -1,4 +1,4 @@
-# sum-product
+# sumproduct
 
 An implementation of Belief Propagation for factor graphs, also known as the sum product algorithm.
 

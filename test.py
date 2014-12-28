@@ -1,8 +1,7 @@
 import unittest
 import numpy as np
 
-from nodes_and_messages import Variable, Factor
-from factor_graph import FactorGraph
+from sumproduct import Variable, Factor, FactorGraph
 
 class SimpleGraph(unittest.TestCase):
   """
