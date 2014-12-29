@@ -11,8 +11,11 @@ release:
 	python setup.py sdist upload -r ${PLATFORM}
 	python setup.py bdist_wheel upload -r ${PLATFORM}
 ifeq (test, $(PLATFORM))
-	$(info now do: pip install -i https://testpypi.python.org/pypi)
+	$(info now do: pip install -i https://testpypi.python.org/pypi sumproduct)
 endif
 
 clean:
 	rm -rf build/ dist/ sumproduct.egg-info/
+
+readme:
+	pandoc -s readme.md -o README.rst

@@ -1,6 +1,6 @@
-# sumproduct
+# [sumproduct](https://pypi.python.org/pypi/sumproduct)
 
-An implementation of Belief Propagation for factor graphs, also known as the sum product algorithm.
+An implementation of Belief Propagation for factor graphs, also known as the sum-product algorithm ([Reference](http://web4.cs.ucl.ac.uk/staff/D.Barber/pmwiki/pmwiki.php?n=Brml.HomePage)).
 
 ```
 pip install sumproduct
@@ -8,7 +8,7 @@ pip install sumproduct
 
 ![Simple factor graph](http://f.cl.ly/items/2P021j2y3A2Q191F451h/unnamed0.png)
 
-The factor graph used in `test.py`.
+The factor graph used in `test.py` (image made with [yEd](http://www.yworks.com/en/products_yed_applicationfeatures.html)).
 
 ## Basic Usage
 
@@ -25,11 +25,11 @@ f12 = Factor('f12', np.array([
   [0.8,0.2],
   [0.2,0.8],
   [0.5,0.5]
-])) # create a factor node potentials for p(x1 | x2)
+])) # create a factor, node potential for p(x1 | x2)
 # connect the parents to their children
 g.add(f12)
-g.append('f12', x2)
-g.append('f12', x1)
+g.append('f12', x2) # order must be the same as dimensions in factor potential!
+g.append('f12', x1) # note: f12 potential's shape is (3,2), i.e. (x2,x1)
 ```
 
 ### Run Inference
