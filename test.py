@@ -1,7 +1,8 @@
 import unittest
 import numpy as np
+import pdb
 
-from sumproduct import Variable, Factor, FactorGraph
+from sumproduct import Variable, Factor, FactorGraph, Mu
 
 class SimpleGraph(unittest.TestCase):
   """
@@ -71,6 +72,19 @@ class SimpleGraph(unittest.TestCase):
       np.allclose(self.g.nodes['x3'].bfmarginal, np.array([ 0.2,  0.8])))
     self.failUnless(
       np.allclose(self.g.nodes['x4'].bfmarginal, np.array([ 0.5,  0.5])))
+
+class InboxToMarginal(unittest.TestCase):
+  def setUp(self):
+    node = Variable('bit', 2)
+    uniform = Mu(None, np.array([0.5,0.5]))
+    point = Mu(None, np.array([1.0,0.0]))
+    node.deliver(2, uniform)
+    node.deliver(2, point)
+    self.node = node
+
+  def testFewHarshProbabilities(self):
+    self.failUnless(
+      np.allclose(self.node.marginal(), np.array([1.0, 0.0])))
 
 def main():
   unittest.main()

@@ -1,5 +1,6 @@
 import numpy as np
 from math import isinf
+import pdb
 
 class Node:
   def __init__(self, name):
@@ -151,7 +152,7 @@ class Variable(Node):
     if len(self.inbox):
       mus = self.inbox[max(self.inbox.keys())]
       log_vals = [np.log(mu.val) for mu in mus]
-      valid_log_vals = [self.rem_inf(lv) for lv in log_vals]
+      valid_log_vals = [np.nan_to_num(lv) for lv in log_vals]
       sum_logs = reduce(lambda a, e: a+e, valid_log_vals)
       valid_sum_logs = sum_logs - max(sum_logs) # IMPORANT!
       prod = np.exp(valid_sum_logs)
@@ -172,17 +173,6 @@ class Variable(Node):
       '} \hline' +
       data_str +
       '\\\\ \hline \end{tabular}$$')
-
-  @staticmethod
-  def rem_inf(arr):
-    """
-    If needed, remove infinities (specifically, negative
-    infinities are likely to occur)
-    """
-    if isinf(sum(arr)):
-      return np.array([0 if isinf(number) else number for number in arr])
-    else:
-      return np.array(arr)
 
   def make_message(self, recipient):
     """
