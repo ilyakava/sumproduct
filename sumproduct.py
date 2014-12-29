@@ -48,22 +48,22 @@ class Factor(Node):
     4. exponentiate the previous result, multiply by exp of max_lambda
     and run summation to sum over all the states not in the recipient
     node
+    5. log previous, add back max_lambda, and exponentiate because we
+    will pass around mus rather than lambdas everywhere
 
-    The treatment of the max_lambda differs here from 5.1.42, which
-    incorrectly derived from 5.1.40 (you cannot take lambda* out of
-    the log b/c it is involved in a non-linear operation)
+    Note that max_lambda in 5.1.42 is NOT a element-wise maximum (and
+    therefore a matrix), it is a scalar.
     """
     if not len(self.connections) == 1:
       unfiltered_mus = self.inbox[max(self.inbox.keys())]
       mus = [mu for mu in unfiltered_mus if not mu.from_node == recipient]
       all_mus = [self.reformat_mu(mu) for mu in mus]
-      lambdas = [np.log(mu) for mu in all_mus]
-      max_lambda_nan = reduce(lambda a,e: np.maximum(a,e), lambdas)
-      max_lambda = np.nan_to_num(max_lambda_nan)
+      lambdas = np.array([np.log(mu) for mu in all_mus])
+      max_lambdas = np.nan_to_num(lambdas.flatten())
+      max_lambda = max(max_lambdas)
       result = reduce(lambda a,e: a + e, lambdas) - max_lambda
-      product_output2 = np.multiply(self.p, np.exp(result))
-      product_output = np.multiply(product_output2, np.exp(max_lambda))
-      return self.summation(product_output, recipient)
+      product_output = np.multiply(self.p, np.exp(result))
+      return np.exp(np.log(self.summation(product_output, recipient)) + max_lambda)
     else:
       return self.summation(self.p, recipient)
 
