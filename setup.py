@@ -16,7 +16,7 @@ setup(
     license='MIT',
     author='Ilya Kavalerov',
     author_email='ilyakavalerov@gmail.com',
-    packages=find_packages(exclude=['tests*']),
+    packages=find_packages(exclude=['test*']),
     py_modules=['sumproduct'],
     install_requires=['numpy'],
     include_package_data=True,
