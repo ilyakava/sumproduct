@@ -242,6 +242,8 @@ class FactorGraph:
     """
     Mutates the factors connected to Variable with name!
 
+    @param state: Ordinal state starting at ONE (1)
+
     As described in Barber 5.1.3. But instead of multiplying
     factors with an indicator/delta_function to account for
     an observation, the factor node loses the dimensions for
@@ -252,6 +254,7 @@ class FactorGraph:
     node = self.nodes[name]
     assert isinstance(node, Variable)
     assert node.size >= state
+    assert state, "state is obsered on an ordinal scale starting at ONE (1)"
     for factor in [c for c in node.connections if isinstance(c, Factor)]:
       delete_axis = factor.connections.index(node)
       delete_dims = range(node.size)
