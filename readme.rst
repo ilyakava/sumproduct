@@ -74,6 +74,9 @@ Condition on Observations
     >>> g.compute_marginals(max_iter=500, tolerance=1e-6)
     >>> g.nodes['x1'].marginal()
     array([ 0.2,  0.8])
+    >>> g.brute_force()
+    >>> g.nodes['x1'].bfmarginal
+    array([ 0.2,  0.8])
 
 Additional Information
 ^^^^^^^^^^^^^^^^^^^^^^
