@@ -65,6 +65,8 @@ array([ 0.2,  0.8])
 ```
 #### Additional Information
 
+`sumproduct` implements a parallel message passing schedule: Message passing alternates between Factors and Variables sending messages to all their neighbors until the convergence of marginals.
+
 Check `test.py` for a detailed example.
 
 ## Implementation Details
