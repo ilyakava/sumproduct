@@ -1,5 +1,7 @@
 # [sumproduct](https://pypi.python.org/pypi/sumproduct)
 
+[![Build Status](https://travis-ci.org/ilyakava/sumproduct.svg?branch=master)](https://travis-ci.org/ilyakava/sumproduct)
+
 An implementation of Belief Propagation for factor graphs, also known as the sum-product algorithm ([Reference](http://web4.cs.ucl.ac.uk/staff/D.Barber/pmwiki/pmwiki.php?n=Brml.HomePage)).
 
 ```

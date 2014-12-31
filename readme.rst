@@ -1,6 +1,8 @@
 `sumproduct <https://pypi.python.org/pypi/sumproduct>`__
 ========================================================
 
+|Build Status|
+
 An implementation of Belief Propagation for factor graphs, also known as
 the sum-product algorithm
 (`Reference <http://web4.cs.ucl.ac.uk/staff/D.Barber/pmwiki/pmwiki.php?n=Brml.HomePage>`__).
@@ -93,3 +95,6 @@ Implementation Details
 See block comments in the code's methods for details, but the
 implementation strategy comes from Chapter 5 of `David Barber's
 book <http://web4.cs.ucl.ac.uk/staff/D.Barber/pmwiki/pmwiki.php?n=Brml.HomePage>`__.
+
+.. |Build Status| image:: https://travis-ci.org/ilyakava/sumproduct.svg?branch=master
+   :target: https://travis-ci.org/ilyakava/sumproduct
