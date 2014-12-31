@@ -9,7 +9,7 @@ def read(*paths):
 
 setup(
     name='sumproduct',
-    version='0.0.4',
+    version='0.0.5',
     description='The sum-product algorithm. Belief propagation (message passing) for factor graphs',
     long_description=(read('README.rst')),
     url='http://github.com/ilyakava/sumproduct/',
