@@ -271,6 +271,16 @@ class FactorGraph:
     """
     sum-product algorithm
 
+    @param error_fun: a custom error function that takes two arguments
+    each of the form of export_marginals' return value
+
+    @return epsilons[1:]: if you are using the default error function
+    compate_marginals, the first two epsilons are meaningless (first
+    entry is arbitrarily 1, and first marginal is arbitrarily uniform
+    so the second computed epsilon will also be arbitrary). HOWEVER,
+    those using a custom error function might only using the most
+    recently computed marginal, and would be interested in epsilons[1].
+
     Mutates nodes by adding in the messages passed into their
     'inbox' instance variables. It does not change the potentials
     on the Factor nodes.
@@ -323,9 +333,7 @@ class FactorGraph:
     if not self.silent:
       print 'X'*50
       print 'final epsilons after ' + str(step) + ' iterations = ' + str(epsilons[-1])
-    # first two epsilons are meaningless since first entry is arbitrary and
-    # first marginal is arbitrarily uniform
-    return epsilons[2:]
+    return epsilons[1:] # skip only the first, see docstring above
 
   def brute_force(self):
     """
