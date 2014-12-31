@@ -6,10 +6,14 @@ from sumproduct import Variable, Factor, FactorGraph, Mu
 
 class SimpleGraph(unittest.TestCase):
   """
-  This is the graph pictured in the readme
+  This is the graph pictured in the readme.
+
+  Learn more about this graphical model from exercise 8.10
+  and figure 8.54 in Christopher Bishop's Pattern Recognition
+  and Machine Learning
   """
 
-  def setUp(self):
+  def createSimpleGraph(self):
     # create the orphaned nodes
     node_names = ['x1', 'x2', 'x3', 'x4']
     dims = [2,3,2,2]
@@ -50,9 +54,22 @@ class SimpleGraph(unittest.TestCase):
     g.append('f12', x[1])
     g.append('x3', f3)
     g.append('x4', f4)
-    self.g = g
+    return g
 
-  def testSimpleGraph(self):
+  def setUp(self):
+    self.g = self.createSimpleGraph()
+
+  def testTwoIndependentInstances(self):
+    g1 = self.createSimpleGraph()
+    g2 = FactorGraph()
+    self.failUnless(len(g1.nodes))
+    self.failUnless(len(g2.nodes) == 0)
+
+  def testCustomErrorFunction(self):
+    func = lambda m1, m2: sum([sum(np.absolute(m1[k] - m2[k])) for k in m1.keys()])
+    self.g.compute_marginals(error_fun=func)
+
+  def testSumProductInference(self):
     self.g.compute_marginals()
     self.failUnless(
       np.allclose(self.g.nodes['x1'].marginal(), np.array([ 0.536,  0.464])))
@@ -63,6 +80,7 @@ class SimpleGraph(unittest.TestCase):
     self.failUnless(
       np.allclose(self.g.nodes['x4'].marginal(), np.array([ 0.5,  0.5])))
 
+  def testBruteForceInference(self):
     self.g.brute_force()
     self.failUnless(
       np.allclose(self.g.nodes['x1'].bfmarginal, np.array([ 0.536,  0.464])))

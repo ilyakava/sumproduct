@@ -136,9 +136,8 @@ class Factor(Node):
     return out
 
 class Variable(Node):
-  bfmarginal = None
-
   def __init__(self, name, size):
+    self.bfmarginal = None
     self.size = size
     Node.__init__(self, name)
 
@@ -199,12 +198,10 @@ class Mu:
     self.val = val.flatten() / sum(val.flatten())
 
 class FactorGraph:
-  nodes = {}
-  silent = False
-
-  def __init__(self, first_node=None, silent=False):
-    if silent:
-      self.silent = silent
+  def __init__(self, first_node=None, silent=False, debug=False):
+    self.nodes = {}
+    self.silent = silent
+    self.debug = debug
     if first_node:
       self.nodes[first_node.name] = first_node
 
@@ -270,7 +267,7 @@ class FactorGraph:
     assert not len(np.setdiff1d(m1.keys(), m2.keys()))
     return sum([sum(np.absolute(m1[k] - m2[k])) for k in m1.keys()])
 
-  def compute_marginals(self, max_iter=500, tolerance=1e-6):
+  def compute_marginals(self, max_iter=500, tolerance=1e-6, error_fun=None):
     """
     sum-product algorithm
 
@@ -313,13 +310,16 @@ class FactorGraph:
       for sender in senders:
         next_recipients = sender.connections
         for recipient in next_recipients:
-          if not self.silent:
+          if self.debug:
             print sender.name + ' -> ' + recipient.name
           val = sender.make_message(recipient)
           message = Mu(sender, val)
           recipient.deliver(step, message)
       cur_marginals = self.export_marginals()
-      epsilon = self.compare_marginals(cur_marginals, last_marginals)
+      if error_fun:
+        epsilon = error_fun(cur_marginals, last_marginals)
+      else:
+        epsilon = self.compare_marginals(cur_marginals, last_marginals)
     if not self.silent:
       print 'X'*50
       print 'final epsilon after ' + str(step) + ' iterations = ' + str(epsilon)
