@@ -313,7 +313,7 @@ class FactorGraph:
       last_marginals = cur_marginals
       step += 1
       if not self.silent:
-        print 'epsilons: ' + str(epsilons[-1]) + ' | ' + str(step) + '-'*20
+        print 'epsilon: ' + str(epsilons[-1]) + ' | ' + str(step) + '-'*20
       factors = [n for n in self.nodes.values() if isinstance(n, Factor)]
       variables = [n for n in self.nodes.values() if isinstance(n, Variable)]
       senders = factors + variables
@@ -332,7 +332,7 @@ class FactorGraph:
         epsilons.append(self.compare_marginals(cur_marginals, last_marginals))
     if not self.silent:
       print 'X'*50
-      print 'final epsilons after ' + str(step) + ' iterations = ' + str(epsilons[-1])
+      print 'final epsilon after ' + str(step) + ' iterations = ' + str(epsilons[-1])
     return epsilons[1:] # skip only the first, see docstring above
 
   def brute_force(self):
