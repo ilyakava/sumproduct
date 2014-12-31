@@ -287,8 +287,8 @@ class FactorGraph:
     probabilities dominate heavily when the tolerance is very small
     """
     # for keeping track of state
-    epsilon = 1
-    step = 1
+    epsilons = [1]
+    step = 0
     # for testing convergence
     cur_marginals = self.export_marginals()
     # initialization
@@ -299,11 +299,11 @@ class FactorGraph:
           recipient.deliver(step, message)
 
     # propagation (w/ termination conditions)
-    while (step < max_iter) and tolerance < epsilon:
+    while (step < max_iter) and tolerance < epsilons[-1]:
       last_marginals = cur_marginals
       step += 1
       if not self.silent:
-        print 'epsilon: ' + str(epsilon) + ' | ' + str(step) + '-'*20
+        print 'epsilons: ' + str(epsilons[-1]) + ' | ' + str(step) + '-'*20
       factors = [n for n in self.nodes.values() if isinstance(n, Factor)]
       variables = [n for n in self.nodes.values() if isinstance(n, Variable)]
       senders = factors + variables
@@ -317,12 +317,15 @@ class FactorGraph:
           recipient.deliver(step, message)
       cur_marginals = self.export_marginals()
       if error_fun:
-        epsilon = error_fun(cur_marginals, last_marginals)
+        epsilons.append(error_fun(cur_marginals, last_marginals))
       else:
-        epsilon = self.compare_marginals(cur_marginals, last_marginals)
+        epsilons.append(self.compare_marginals(cur_marginals, last_marginals))
     if not self.silent:
       print 'X'*50
-      print 'final epsilon after ' + str(step) + ' iterations = ' + str(epsilon)
+      print 'final epsilons after ' + str(step) + ' iterations = ' + str(epsilons[-1])
+    # first two epsilons are meaningless since first entry is arbitrary and
+    # first marginal is arbitrarily uniform
+    return epsilons[2:]
 
   def brute_force(self):
     """
