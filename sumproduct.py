@@ -299,6 +299,9 @@ class FactorGraph:
     # for keeping track of state
     epsilons = [1]
     step = 0
+	# for inbox clearance
+    for node in self.nodes.values():
+      node.inbox.clear()
     # for testing convergence
     cur_marginals = self.export_marginals()
     # initialization
