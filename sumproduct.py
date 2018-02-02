@@ -250,7 +250,7 @@ class FactorGraph:
         assert state, "state is obsered on an ordinal scale starting at ONE(1)"
         for factor in [c for c in node.connections if isinstance(c, Factor)]:
             delete_axis = factor.connections.index(node)
-            delete_dims = range(node.size)
+            delete_dims = list(range(node.size)) # Fixed because pop is not a method of the range object
             delete_dims.pop(state - 1)
             sliced = np.delete(factor.p, delete_dims, delete_axis)
             factor.p = np.squeeze(sliced)
