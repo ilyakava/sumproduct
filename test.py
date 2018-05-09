@@ -55,8 +55,8 @@ class SimpleGraph(unittest.TestCase):
     def testTwoIndependentInstances(self):
         g1 = self.createSimpleGraph()
         g2 = FactorGraph()
-        self.failUnless(len(g1.nodes))
-        self.failUnless(len(g2.nodes) == 0)
+        self.assertTrue(len(g1.nodes))
+        self.assertTrue(len(g2.nodes) == 0)
 
     def testCustomErrorFunction(self):
         def func(m1, m2):
@@ -66,28 +66,28 @@ class SimpleGraph(unittest.TestCase):
 
     def testSumProductInference(self):
         self.g.compute_marginals()
-        self.failUnless(
+        self.assertTrue(
             np.allclose(self.g.nodes['x1'].marginal(), np.array([0.536, 0.464
                                                                  ])))
-        self.failUnless(
+        self.assertTrue(
             np.allclose(self.g.nodes['x2'].marginal(), np.array([0.48, 0.36,
                                                                  0.16])))
-        self.failUnless(
+        self.assertTrue(
             np.allclose(self.g.nodes['x3'].marginal(), np.array([0.2, 0.8])))
-        self.failUnless(
+        self.assertTrue(
             np.allclose(self.g.nodes['x4'].marginal(), np.array([0.5, 0.5])))
 
     def testBruteForceInference(self):
         self.g.brute_force()
-        self.failUnless(
+        self.assertTrue(
             np.allclose(self.g.nodes['x1'].bfmarginal, np.array([0.536, 0.464
                                                                  ])))
-        self.failUnless(
+        self.assertTrue(
             np.allclose(self.g.nodes['x2'].bfmarginal, np.array([0.48, 0.36,
                                                                  0.16])))
-        self.failUnless(
+        self.assertTrue(
             np.allclose(self.g.nodes['x3'].bfmarginal, np.array([0.2, 0.8])))
-        self.failUnless(
+        self.assertTrue(
             np.allclose(self.g.nodes['x4'].bfmarginal, np.array([0.5, 0.5])))
 
 
@@ -101,7 +101,7 @@ class InboxToMarginal(unittest.TestCase):
         self.node = node
 
     def testFewHarshProbabilities(self):
-        self.failUnless(
+        self.assertTrue(
             np.allclose(self.node.marginal(), np.array([1.0, 0.0])))
 
 
